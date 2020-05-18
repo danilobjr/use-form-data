@@ -1,0 +1,66 @@
+.app {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form > .field {
+  display: flex;
+  width: 220px;
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+
+.form > .actions > button {
+  text-transform: uppercase;
+  padding: 8px 16px;
+  background-color: lightgray;
+  border: 1px solid darkgray;
+  border-radius: 2px;
+}
+
+.form > .actions > button:hover,
+.form > .actions > button:focus {
+  background-color: #ddd;
+}
+
+.form > .actions > button:active {
+  background-color: #ccc;
+}
+
+.form > .actions > button:focus {
+  outline: none;
+}
+
+.field > .label {
+  margin-bottom: 5px;
+  font-size: .9rem;
+  font-weight: 100;
+}
+
+.field > .input {
+  padding: .7rem;
+  font-weight: 100;
+  border: 1px solid lightgray;
+  border-radius: 2px;
+  outline: none;
+}
+
+.field > .input:focus {
+  border-color: gray;
+}
+
+.field > .message {
+  margin-top: 5px;
+  font-size: .8rem;
+}
+
+.field.-not-valid > .label,
+.field.-not-valid > .message {
+  color: lightcoral;
+}
+
+.field.-not-valid > .input {
+  border-color: lightcoral;
+}

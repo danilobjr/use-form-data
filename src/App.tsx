@@ -1,21 +1,42 @@
-import React from 'react';
+import React, { FC, HTMLProps } from 'react';
+import classnames from 'classnames';
 import './App.css';
+
+type FormFieldProps = {
+  message?: string
+  valid?: boolean
+} & HTMLProps<HTMLFormElement>;
+
+const FormField: FC<FormFieldProps> = ({
+  label,
+  message,
+  type = 'text',
+  valid = true,
+  value = '' 
+}) => (
+  <div
+    className={classnames('form-field', {
+      '-not-valid': !valid
+    })}
+  >
+    {label && <label className="label">{label}</label>}
+    <input className="input" type={type} value={value} />
+    {message && <span className="message">{message}</span>}
+  </div>
+);
 
 function App() {
   return (
     <div className="app">
       <form className="form">
-        <div className="field">
-          <label className="label">Login</label>
-          <input className="input" type="text" />
-          <span className="message">Error message here</span>
-        </div>
+        <FormField
+          label="Login"          
+        />
 
-        <div className="field -not-valid">
-          <label className="label">Password</label>
-          <input className="input" type="password" />
-          <span className="message">Error message here</span>
-        </div>
+        <FormField
+          label="Password"
+          type="password"
+        />
 
         <div className="actions">
           <button type="submit">Login</button>

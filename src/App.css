@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.form > .field {
+.form > .form-field {
   display: flex;
   width: 220px;
   margin-bottom: 20px;
@@ -33,13 +33,13 @@
   outline: none;
 }
 
-.field > .label {
+.form-field > .label {
   margin-bottom: 5px;
   font-size: .9rem;
   font-weight: 100;
 }
 
-.field > .input {
+.form-field > .input {
   padding: .7rem;
   font-weight: 100;
   border: 1px solid lightgray;
@@ -47,20 +47,20 @@
   outline: none;
 }
 
-.field > .input:focus {
+.form-field > .input:focus {
   border-color: gray;
 }
 
-.field > .message {
+.form-field > .message {
   margin-top: 5px;
   font-size: .8rem;
 }
 
-.field.-not-valid > .label,
-.field.-not-valid > .message {
+.form-field.-not-valid > .label,
+.form-field.-not-valid > .message {
   color: lightcoral;
 }
 
-.field.-not-valid > .input {
+.form-field.-not-valid > .input {
   border-color: lightcoral;
 }

@@ -3,15 +3,32 @@ import React, { FC, HTMLProps, useState } from 'react'
 import cn from 'classnames'
 import { FormField } from '../components'
 
+const useFormData = <T extends Record<string, any>>(initialValues: T) => {
+  const [values, setValues] = useState(initialValues)
 
+  const setFieldValue = <K extends keyof T>(fieldName: K) => (value: T[K]) => {
+    setValues({
+      ...values,
+      [fieldName]: value,
+    })
+  }
 
-const App: FC = () => {
-  const initialState = {
+  return {
+    values,
+    setFieldValue,
+  }
+}
+
+const Index: FC = () => {
+  const initialValues = {
     login: '',
     password: '',
   }
 
-  const [state, setState] = useState(initialState);
+  type FormData = typeof initialValues
+
+  // const { values, setFieldValue, errors, triggerValidation } = useFormData<typeof initialState>(initialState, validationSchema)
+  const { values, setFieldValue } = useFormData(initialValues)
 
   return (
     <div className="app">
@@ -21,17 +38,17 @@ const App: FC = () => {
       </Head>
 
       <div className="form">
-        <FormField
+        <FormField.Text
           label="Login"
-          value={state.login}
-          onChange={e => setState({ ...state, login: e.currentTarget.value })}
+          value={values.login}
+          onChange={setFieldValue('login')}
         />
 
-        <FormField
+        <FormField.Text
           label="Password"
           type="password"
-          value={state.password}
-          onChange={e => setState({ ...state, password: e.currentTarget.value })}
+          value={values.password}
+          onChange={setFieldValue('password')}
         />
 
         <div className="actions">
@@ -42,4 +59,4 @@ const App: FC = () => {
   )
 }
 
-export { App }
+export default Index

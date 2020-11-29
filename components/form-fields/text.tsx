@@ -1,17 +1,19 @@
 import React, { FC, HTMLProps } from 'react'
 import cn from 'classnames'
+import { path, pipe } from 'ramda'
 
-type FormFieldProps = {
-  message?: string
+type TextProps = {
+  errorMessage?: string
+  type?: 'text' | 'password'
   valid?: boolean
-} & HTMLProps<HTMLInputElement>
+  onChange: (value: string) => void
+} & Omit<HTMLProps<HTMLInputElement>, 'onChange'>
 
-const FormField: FC<FormFieldProps> = ({
+const Text: FC<TextProps> = ({
   label,
-  message,
-  type = 'text',
-  valid = true,
-  value = '',
+  errorMessage: message,
+  valid,
+  onChange,
   ...otherProps
 }) => (
   <div
@@ -21,10 +23,9 @@ const FormField: FC<FormFieldProps> = ({
   >
     {label && <label className="label">{label}</label>}
 
-    <input 
+    <input
       className="input"
-      type={type}
-      value={value}
+      onChange={pipe(path(['currentTarget', 'value']), onChange)}
       {...otherProps}
     />
 
@@ -32,13 +33,13 @@ const FormField: FC<FormFieldProps> = ({
   </div>
 )
 
-FormField.displayName = 'FormField'
+Text.displayName = 'Text'
 
-FormField.defaultProps = {
-  message: '',
+Text.defaultProps = {
+  errorMessage: '',
   type: 'text',
   valid: true,
   value: '',
 }
 
-export { FormField }
+export { Text }

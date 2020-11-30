@@ -7,12 +7,19 @@ import { FormField } from '../components'
 const useFormData = <T extends Record<string, any>>(initialValues: T, validationSchema: ObjectSchema<T>) => {
   const [values, setValues] = useState(initialValues)
   const [valid, setValid] = useState(true)
+  const [errors, setErrors] = useState({})
 
   useEffect(() => {
     validationSchema
       .isValid(values)
       .then(setValid)
-  }, [JSON.stringify(values)])
+      .catch(console.error)
+
+    validationSchema
+      .validate(values, { abortEarly: false })
+      .then(console.log)
+      .catch((error) => setErrors(error?.inner))
+  }, [JSON.stringify({ values, errors })])
 
   const setFieldValue = <K extends keyof T>(fieldName: K) => (value: T[K]) => {
     setValues({
@@ -25,6 +32,7 @@ const useFormData = <T extends Record<string, any>>(initialValues: T, validation
 
   return {
     values,
+    errors,
     setFieldValue,
     isValid,
   }
@@ -47,7 +55,8 @@ const Index: FC = () => {
   }
 
   // const { values, setFieldValue, errors, triggerValidation } = useFormData<typeof initialState>(initialState, validationSchema)
-  const { values, setFieldValue, isValid } = useFormData(initialValues, validationSchema)
+  const { values, errors, setFieldValue, isValid } = useFormData(initialValues, validationSchema)
+  console.log(errors)
 
   const handleSubmit = () => {
     if (isValid()) {

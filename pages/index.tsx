@@ -8,6 +8,7 @@ const useFormData = <T extends Record<string, any>>(initialValues: T, validation
   const [values, setValues] = useState(initialValues)
   const [valid, setValid] = useState(true)
   const [errors, setErrors] = useState<ValidationError[]>([])
+  const [validationTriggered, setValidationTriggered] = useState(false)
 
   useEffect(() => {
     validationSchema
@@ -29,11 +30,15 @@ const useFormData = <T extends Record<string, any>>(initialValues: T, validation
 
   const isValid = () => valid
 
+  const triggerValidation = () => setValidationTriggered(true)
+
   return {
     values,
     errors,
     setFieldValue,
     isValid,
+    validationTriggered,
+    triggerValidation,
   }
 }
 
@@ -54,10 +59,11 @@ const Index: FC = () => {
   }
 
   // const { values, setFieldValue, errors, triggerValidation } = useFormData<typeof initialState>(initialState, validationSchema)
-  const { values, errors, setFieldValue, isValid } = useFormData(initialValues, validationSchema)
-  console.log(errors)
+  const { values, errors, setFieldValue, isValid, validationTriggered, triggerValidation } = useFormData(initialValues, validationSchema)
 
   const handleSubmit = () => {
+    triggerValidation()
+
     if (isValid()) {
       alert('ok')
     }
@@ -76,6 +82,7 @@ const Index: FC = () => {
           value={values.login}
           onChange={setFieldValue('login')}
         />
+        {validationTriggered && errors && <div>{errors?.find(e => e.path === 'login')?.message}</div>}
 
         <FormField.Text
           label="Password"
@@ -83,12 +90,12 @@ const Index: FC = () => {
           value={values.password}
           onChange={setFieldValue('password')}
         />
+        {validationTriggered && errors && <div>{errors?.find(e => e.path === 'password')?.message}</div>}
 
         <div className="actions">
           <button type="submit" onClick={handleSubmit}>Login</button>
         </div>
 
-        <span>Valid: {String(isValid())}</span>
       </div>
     </div>
   )

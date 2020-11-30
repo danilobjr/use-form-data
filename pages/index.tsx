@@ -3,44 +3,7 @@ import React, { FC, HTMLProps, useState, useEffect } from 'react'
 import cn from 'classnames'
 import { object, string, ObjectSchema, ValidationError } from 'yup'
 import { FormField } from '../components'
-
-const useFormData = <T extends Record<string, any>>(initialValues: T, validationSchema: ObjectSchema<T>) => {
-  const [values, setValues] = useState(initialValues)
-  const [valid, setValid] = useState(true)
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  const [validationTriggered, setValidationTriggered] = useState(false)
-
-  useEffect(() => {
-    validationSchema
-      .isValid(values)
-      .then(setValid)
-      .catch(console.error)
-
-    validationSchema
-      .validate(values, { abortEarly: false })
-      .catch((error) => setErrors(error?.inner))
-  }, [JSON.stringify({ values, errors })])
-
-  const setFieldValue = <K extends keyof T>(fieldName: K) => (value: T[K]) => {
-    setValues({
-      ...values,
-      [fieldName]: value,
-    })
-  }
-
-  const isValid = () => valid
-
-  const triggerValidation = () => setValidationTriggered(true)
-
-  return {
-    values,
-    errors,
-    setFieldValue,
-    isValid,
-    validationTriggered,
-    triggerValidation,
-  }
-}
+import { useFormData } from '../lib'
 
 type FormData = {
   login: string
@@ -58,8 +21,14 @@ const Index: FC = () => {
     password: '',
   }
 
-  // const { values, setFieldValue, errors, triggerValidation } = useFormData<typeof initialState>(initialState, validationSchema)
-  const { values, errors, setFieldValue, isValid, validationTriggered, triggerValidation } = useFormData(initialValues, validationSchema)
+  const {
+    values,
+    errors,
+    setFieldValue,
+    isValid,
+    validationTriggered,
+    triggerValidation,
+  } = useFormData(initialValues, validationSchema)
 
   const handleSubmit = () => {
     triggerValidation()

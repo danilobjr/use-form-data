@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import React, { FC, HTMLProps, useState, useEffect } from 'react'
 import cn from 'classnames'
-import { object, string, ObjectSchema } from 'yup'
+import { object, string, ObjectSchema, ValidationError } from 'yup'
 import { FormField } from '../components'
 
 const useFormData = <T extends Record<string, any>>(initialValues: T, validationSchema: ObjectSchema<T>) => {
   const [values, setValues] = useState(initialValues)
   const [valid, setValid] = useState(true)
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<ValidationError[]>([])
 
   useEffect(() => {
     validationSchema
@@ -17,7 +17,6 @@ const useFormData = <T extends Record<string, any>>(initialValues: T, validation
 
     validationSchema
       .validate(values, { abortEarly: false })
-      .then(console.log)
       .catch((error) => setErrors(error?.inner))
   }, [JSON.stringify({ values, errors })])
 

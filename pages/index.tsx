@@ -1,10 +1,18 @@
 import Head from 'next/head'
-import React, { FC, HTMLProps, useState } from 'react'
+import React, { FC, HTMLProps, useState, useEffect } from 'react'
 import cn from 'classnames'
+import { object, string, ObjectSchema } from 'yup'
 import { FormField } from '../components'
 
-const useFormData = <T extends Record<string, any>>(initialValues: T) => {
+const useFormData = <T extends Record<string, any>>(initialValues: T, validationSchema: ObjectSchema<T>) => {
   const [values, setValues] = useState(initialValues)
+  const [valid, setValid] = useState(true)
+
+  useEffect(() => {
+    validationSchema
+      .isValid(values)
+      .then(setValid)
+  }, [JSON.stringify(values)])
 
   const setFieldValue = <K extends keyof T>(fieldName: K) => (value: T[K]) => {
     setValues({
@@ -13,22 +21,39 @@ const useFormData = <T extends Record<string, any>>(initialValues: T) => {
     })
   }
 
+  const isValid = () => valid
+
   return {
     values,
     setFieldValue,
+    isValid,
   }
 }
 
+type FormData = {
+  login: string
+  password: string
+}
+
+let validationSchema = object().shape<FormData>({
+  login: string().required(),
+  password: string().required(),
+});
+
 const Index: FC = () => {
-  const initialValues = {
+  const initialValues: FormData = {
     login: '',
     password: '',
   }
 
-  type FormData = typeof initialValues
-
   // const { values, setFieldValue, errors, triggerValidation } = useFormData<typeof initialState>(initialState, validationSchema)
-  const { values, setFieldValue } = useFormData(initialValues)
+  const { values, setFieldValue, isValid } = useFormData(initialValues, validationSchema)
+
+  const handleSubmit = () => {
+    if (isValid()) {
+      alert('ok')
+    }
+  }
 
   return (
     <div className="app">
@@ -52,8 +77,10 @@ const Index: FC = () => {
         />
 
         <div className="actions">
-          <button type="submit">Login</button>
+          <button type="submit" onClick={handleSubmit}>Login</button>
         </div>
+
+        <span>Valid: {String(isValid())}</span>
       </div>
     </div>
   )

@@ -1,42 +1,51 @@
 import { ObjectSchema, ValidationError } from 'yup'
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
+import { anyPass, isEmpty, isNil } from "ramda";
+
+type Errors<T> = Record<keyof T, ValidationError>
 
 const useFormData = <T extends Record<string, any>>(initialValues: T, validationSchema: ObjectSchema<T>) => {
-  const [values, setValues] = useState(initialValues)
-  const [valid, setValid] = useState(true)
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  const [validationTriggered, setValidationTriggered] = useState(false)
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState<Errors<T>>({})
+  const [validationTriggered, setValidationTriggered] = useState(false);
 
-  useEffect(() => {
-    validationSchema
-      .isValid(values)
-      .then(setValid)
-      .catch(console.error)
-
+  const validate = () => {
     validationSchema
       .validate(values, { abortEarly: false })
-      .catch((error) => setErrors(error?.inner))
-  }, [JSON.stringify({ values, errors })])
+      .then(() => setErrors({}))
+      .catch((error) => {
+        const errorsAsKeyValuePairs = error.inner.reduce((result, error) => {
+          result[error.path] = error;
+          return result;
+        }, {});
+
+        return setErrors(errorsAsKeyValuePairs);
+      });
+  };
+
+  useEffect(validate, [JSON.stringify(values), validationTriggered]);
 
   const setFieldValue = <K extends keyof T>(fieldName: K) => (value: T[K]) => {
     setValues({
       ...values,
       [fieldName]: value,
-    })
-  }
+    });
+  };
 
-  const isValid = () => valid
-
-  const triggerValidation = () => setValidationTriggered(true)
+  const getErrorMessageByField = <K extends keyof T>(fieldName: K) =>
+    validationTriggered && errors?.[fieldName]?.message;
+  const isValid = () => anyPass([isEmpty, isNil])(errors);
+  const triggerValidation = () => setValidationTriggered(true);
 
   return {
     values,
     errors,
-    setFieldValue,
-    isValid,
     validationTriggered,
+    setFieldValue,
+    getErrorMessageByField,
+    isValid,
     triggerValidation,
-  }
-}
+  };
+};
 
 export { useFormData }

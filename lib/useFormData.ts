@@ -6,13 +6,13 @@ type Errors<T> = Record<keyof T, ValidationError>
 
 const useFormData = <T extends Record<string, any>>(initialValues: T, validationSchema: ObjectSchema<T>) => {
   const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState<Errors<T>>({})
+  const [errors, setErrors] = useState<Errors<T>>(null)
   const [validationTriggered, setValidationTriggered] = useState(false);
 
   const validate = () => {
     validationSchema
       .validate(values, { abortEarly: false })
-      .then(() => setErrors({}))
+      .then(() => setErrors(null))
       .catch((error) => {
         const errorsAsKeyValuePairs = error.inner.reduce((result, error) => {
           result[error.path] = error;

@@ -1,30 +1,46 @@
 {
-  "name": "react-validation-hooks",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+  "name": "@danilobjr/use-form-data",
+  "version": "1.0.0",
+  "description": "A non-obtrusive react hook for your form data",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danilobjr/use-form-data.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "form",
+    "validation",
+    "typescript"
+  ],
+  "author": "Danilo Barros <danilobjr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danilobjr/use-form-data/issues"
+  },
+  "homepage": "https://github.com/danilobjr/use-form-data#readme",
   "dependencies": {
     "ramda": "^0.27.1"
   },
   "devDependencies": {
-    "@types/next": "^9.0.0",
-    "@types/node": "^14.14.10",
+    "@types/ramda": "^0.27.32",
     "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
     "@types/yup": "^0.29.10",
-    "next": "^10.0.3",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
     "typescript": "^4.1.2",
     "yup": "^0.32.1"
   },
   "peerDependencies": {
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
     "yup": "^0.32.1"
   }
 }

@@ -5,10 +5,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "directories": {
-    "example": "examples",
     "lib": "lib"
   },
   "scripts": {
+    "build": "tsc",
+    "predeploy": "yarn build",
+    "deploy": "npm publish --access public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,7 +31,8 @@
   },
   "homepage": "https://github.com/danilobjr/use-form-data#readme",
   "dependencies": {
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.1",
+    "tslib": "^2.0.3"
   },
   "devDependencies": {
     "@types/ramda": "^0.27.32",

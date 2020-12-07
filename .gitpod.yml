@@ -1,6 +1,0 @@
-tasks:
-  - init: yarn install && yarn run build
-    command: yarn run start
-vscode:
-  extensions:
-    - pflannery.vscode-versionlens@1.0.9:MpYGqWwv0MK05mglx5q2Jg==
